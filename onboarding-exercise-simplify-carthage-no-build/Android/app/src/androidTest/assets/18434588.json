@@ -1,0 +1,20 @@
+{
+  "by": "maxmcd",
+  "descendants": 24,
+  "id": 18434588,
+  "kids": [
+    18435065,
+    18437831,
+    18434793,
+    18435260,
+    18438874,
+    18436484,
+    18437169,
+    18434809
+  ],
+  "score": 125,
+  "time": 1542048024,
+  "title": "Show HN: WebRTTY – Share a terminal session over WebRTC",
+  "type": "story",
+  "url": "https://github.com/maxmcd/webrtty"
+}

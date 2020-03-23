@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">OnboardingExercise</string>
+    <string name="api_base_url">https://hacker-news.firebaseio.com</string>
+    <string name="item_story_author_label">Author:</string>
+    <string name="unicode_bullet_symbol">•</string>
+    <string name="item_story_comments_label">Comments:</string>
+    <string name="item_job_from_label">Job from</string>
+</resources>

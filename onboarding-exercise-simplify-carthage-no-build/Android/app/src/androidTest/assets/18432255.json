@@ -1,0 +1,14 @@
+{
+  "by": "fanf2",
+  "descendants": 2,
+  "id": 18432255,
+  "kids": [
+    18438562,
+    18435271
+  ],
+  "score": 62,
+  "time": 1542026584,
+  "title": "Distributed consistency at scale: Spanner vs. Calvin (2017)",
+  "type": "story",
+  "url": "http://dbmsmusings.blogspot.com/2017/04/distributed-consistency-at-scale.html"
+}

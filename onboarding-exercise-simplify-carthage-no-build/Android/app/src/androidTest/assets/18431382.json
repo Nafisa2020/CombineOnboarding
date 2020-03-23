@@ -1,0 +1,20 @@
+{
+  "by": "fnordsensei",
+  "descendants": 48,
+  "id": 18431382,
+  "kids": [
+    18438842,
+    18437978,
+    18441035,
+    18439554,
+    18440584,
+    18440484,
+    18439511,
+    18443085
+  ],
+  "score": 206,
+  "time": 1542012818,
+  "title": "Datomic: Event Sourcing without the hassle",
+  "type": "story",
+  "url": "https://vvvvalvalval.github.io/posts/2018-11-12-datomic-event-sourcing-without-the-hassle.html"
+}

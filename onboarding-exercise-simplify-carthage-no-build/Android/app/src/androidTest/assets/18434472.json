@@ -1,0 +1,26 @@
+{
+  "by": "NickBusey",
+  "descendants": 78,
+  "id": 18434472,
+  "kids": [
+    18434801,
+    18436283,
+    18486431,
+    18436084,
+    18435316,
+    18434838,
+    18434832,
+    18435847,
+    18435493,
+    18436216,
+    18449817,
+    18436480,
+    18435623,
+    18437502
+  ],
+  "score": 235,
+  "time": 1542047035,
+  "title": "Show HN: HomelabOS – Ansible scripts to deploy self hosted cloud services",
+  "type": "story",
+  "url": "https://gitlab.com/NickBusey/HomelabOS"
+}
