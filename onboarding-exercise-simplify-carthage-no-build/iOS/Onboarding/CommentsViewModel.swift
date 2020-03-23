@@ -11,13 +11,11 @@ class CommentsViewModel {
   @Published var state: State
 
   private let item: Item
-  private let stateRelay: CurrentValueSubject<State, Never>
   private let service: HackerNewsServiceProtocol
 
   init(item: Item, service: HackerNewsServiceProtocol) {
     self.item = item
     self.service = service
-    self.stateRelay = CurrentValueSubject<State, Never> (State(title: item.title ?? ""))
-    self.state = self.stateRelay.value
+    self.state = (State(title: item.title ?? ""))
   }
 }

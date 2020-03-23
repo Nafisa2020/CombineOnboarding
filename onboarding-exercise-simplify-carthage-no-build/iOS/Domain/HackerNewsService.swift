@@ -3,7 +3,6 @@
 import Combine
 import Foundation
 
-
 public protocol HackerNewsServiceProtocol {
   func fetchTopItemIds() -> AnyPublisher<[Int], Error>
   func fetchItems(forIDs ids: [Int]) -> AnyPublisher<[Item], Error>

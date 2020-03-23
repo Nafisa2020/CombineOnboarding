@@ -9,7 +9,6 @@ class NewsViewModel {
 
   private let service: HackerNewsServiceProtocol
   private let itemStateRelay = CurrentValueSubject<ItemState, Never>(.loading)
-  private let commandRelay = PassthroughSubject<Command, Never>()
 
   private var disposables = Set<AnyCancellable>()
 
@@ -17,11 +16,6 @@ class NewsViewModel {
     self.service = service
 
     self.states = State(title: itemStateRelay.value.title, items: itemStateRelay.value.items.map(NewsItem.init))
-
-    commandRelay
-      .sink(receiveValue: { value in
-        self.commands = value
-      })
   }
 
   // MARK: - Events / Actions
@@ -49,14 +43,14 @@ class NewsViewModel {
           }
 
           self?.states = State(title: title, items: items.map(NewsItem.init))
-      })
+        })
       .store(in: &disposables)
   }
 
   func selectItem(at row: Int) {
     let item = itemStateRelay.value.items[row]
     let viewModel = CommentsViewModel(item: item, service: service)
-    commandRelay.send(.showComments(viewModel))
+    self.commands = .showComments(viewModel)
   }
 
   // MARK: - Nested Types

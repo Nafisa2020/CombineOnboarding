@@ -68,7 +68,7 @@ final class NewsViewController: UITableViewController {
     case .showComments(let commentsViewModel):
       let viewController = CommentsViewController(commentsViewModel)
       show(viewController, sender: self)
-      
+
     default:
       break
     }

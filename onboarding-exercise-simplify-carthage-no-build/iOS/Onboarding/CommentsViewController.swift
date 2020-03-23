@@ -23,10 +23,11 @@ class CommentsViewController: UIViewController {
     super.viewDidLoad()
 
     // Bindings
-    let display = { [unowned self] in self.display($0) }
     viewModel.$state
       .receive(on: DispatchQueue.main)
-      .sink(receiveValue: display)
+      .sink(receiveValue: { [unowned self] value in
+        self.display(value)
+      })
   }
 
   private func display(_ state: CommentsViewModel.State) {

@@ -3,7 +3,6 @@
 import Combine
 import Foundation
 
-
 protocol HackerNewsDataProviding {
   typealias ItemId = Int
 
@@ -33,20 +32,19 @@ final class HackerNewsDataProvider: HackerNewsDataProviding {
 
 private extension HackerNewsDataProvider {
   func dataTaskObservable(urlString: String) -> AnyPublisher<Data, Error> {
-
     guard let url = URL(string: urlString) else {
       return Fail(error: URLError(.badURL))
         .eraseToAnyPublisher()
     }
 
-    return session.dataTaskPublisher(for: URLRequest(url:url))
-      .tryMap() { element -> Data in
+    return session.dataTaskPublisher(for: URLRequest(url: url))
+      .tryMap { element -> Data in
         guard let httpResponse = element.response as? HTTPURLResponse,
           httpResponse.statusCode == 200 else {
             throw URLError(.badServerResponse)
         }
         return element.data
-    }
+      }
     .eraseToAnyPublisher()
   }
 }
