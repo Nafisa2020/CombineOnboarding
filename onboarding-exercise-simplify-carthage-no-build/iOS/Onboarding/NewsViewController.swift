@@ -32,7 +32,7 @@ final class NewsViewController: UITableViewController {
     viewModel.loadNews()
 
     // Bindings
-    viewModel.$states
+    viewModel.states
       .receive(on: DispatchQueue.main)
       .sink(receiveValue: { [unowned self] value in
         self.display(value)

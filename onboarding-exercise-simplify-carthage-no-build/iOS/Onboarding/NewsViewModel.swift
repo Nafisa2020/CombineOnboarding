@@ -4,8 +4,8 @@ import Combine
 import Domain
 
 class NewsViewModel {
-  @Published var states: State!
   @Published var commands: Command!
+  var states: AnyPublisher<State, Never>!
 
   private let service: HackerNewsServiceProtocol
   private let itemStateSubject = CurrentValueSubject<ItemState, Never>(.loading)
@@ -15,7 +15,11 @@ class NewsViewModel {
   init(service: HackerNewsServiceProtocol) {
     self.service = service
 
-    self.states = State(title: itemStateSubject.value.title, items: itemStateSubject.value.items.map(NewsItem.init))
+    self.states = itemStateSubject
+      .map { itemState in
+        return State(title: itemState.title, items: itemState.items.map(NewsItem.init))
+      }
+     .eraseToAnyPublisher()
   }
 
   // MARK: - Events / Actions
@@ -36,13 +40,6 @@ class NewsViewModel {
         },
         receiveValue: {[weak self] in
           self?.itemStateSubject.send(.loaded($0))
-
-          guard let title = self?.itemStateSubject.value.title ,
-            let items = self?.itemStateSubject.value.items else {
-              return
-          }
-
-          self?.states = State(title: title, items: items.map(NewsItem.init))
         })
       .store(in: &disposables)
   }

@@ -27,7 +27,6 @@ public final class HackerNewsService: HackerNewsServiceProtocol {
   public func fetchTopItemIds() -> AnyPublisher<[Int], Error> {
     dataProvider.topItemIds()
       .decode(type: [Int].self, decoder: decoder)
-      .print()
       .eraseToAnyPublisher()
   }
 
@@ -35,7 +34,6 @@ public final class HackerNewsService: HackerNewsServiceProtocol {
     let items = ids.map { [decoder] in
       dataProvider.item(for: $0)
         .decode(type: Item.self, decoder: decoder)
-        .print()
         .eraseToAnyPublisher()
     }
 
