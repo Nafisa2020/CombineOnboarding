@@ -28,6 +28,8 @@ final class NewsViewController: UITableViewController {
 
     tableView.register(NewsItemCell.self)
 
+    configureRefreshControl()
+
     // Load news from the network
     viewModel.loadNews()
 
@@ -47,6 +49,14 @@ final class NewsViewController: UITableViewController {
       .store(in: &disposables)
   }
 
+  // MARK: - configure RefreshControl
+
+  private func configureRefreshControl() {
+    let refreshControl = UIRefreshControl()
+    refreshControl.addTarget(self, action: #selector(refreshData(_:)), for: .valueChanged)
+    self.refreshControl = refreshControl
+  }
+
   // MARK: - State
 
   private func display(_ state: NewsViewModel.State?) {
@@ -55,10 +65,20 @@ final class NewsViewController: UITableViewController {
     }
     title = state.title
 
+    if state.endRefresh {
+      self.refreshControl?.endRefreshing()
+    }
+
     var snapshot = NSDiffableDataSourceSnapshot<Int, NewsItem>()
     snapshot.appendSections([0])
     snapshot.appendItems(state.items)
     dataSource.apply(snapshot, animatingDifferences: false)
+  }
+
+  // MARK: - Refresh
+  @objc
+  private func refreshData(_ sender: Any) {
+    viewModel.refreshNews()
   }
 
   // MARK: - Command

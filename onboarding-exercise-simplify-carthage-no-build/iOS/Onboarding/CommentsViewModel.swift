@@ -19,7 +19,6 @@ class CommentsViewModel {
     stateSubject = CurrentValueSubject<State, Never>(State(title: item.title ?? ""))
 
     self.state = stateSubject
-      .print()
     .eraseToAnyPublisher()
   }
 }

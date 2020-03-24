@@ -18,7 +18,7 @@ class NewsViewModel {
 
     self.states = itemStateSubject
       .map { itemState in
-        return State(title: itemState.title, items: itemState.items.map(NewsItem.init))
+        return State(title: itemState.title, items: itemState.items.map(NewsItem.init), endRefresh: itemState.endRefresh)
       }
      .eraseToAnyPublisher()
 
@@ -48,6 +48,11 @@ class NewsViewModel {
       .store(in: &disposables)
   }
 
+  func refreshNews() {
+    itemStateSubject.send(.loading)
+    loadNews()
+  }
+
   func selectItem(at row: Int) {
     let item = itemStateSubject.value.items[row]
     let viewModel = CommentsViewModel(item: item, service: service)
@@ -59,6 +64,7 @@ class NewsViewModel {
   struct State: Equatable {
     let title: String
     let items: [NewsItem]
+    let endRefresh: Bool
   }
 
   enum Command {
@@ -82,6 +88,13 @@ class NewsViewModel {
       switch self {
       case .loading, .error: return []
       case .loaded(let items): return items
+      }
+    }
+
+    var endRefresh: Bool {
+      switch self {
+      case .loading: return false
+      case .loaded, .error: return true
       }
     }
   }
