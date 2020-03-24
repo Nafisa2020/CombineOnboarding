@@ -1,9 +1,10 @@
 //  Copyright © 2018 Itty Bitty Apps. All rights reserved.
-
+import Combine
 import UIKit
 
 class CommentsViewController: UIViewController {
   private let viewModel: CommentsViewModel
+  private var disposables = Set<AnyCancellable>()
 
   init(_ viewModel: CommentsViewModel) {
     self.viewModel = viewModel
@@ -28,6 +29,7 @@ class CommentsViewController: UIViewController {
       .sink(receiveValue: { [unowned self] value in
         self.display(value)
       })
+    .store(in: &disposables)
   }
 
   private func display(_ state: CommentsViewModel.State) {

@@ -8,14 +8,14 @@ class NewsViewModel {
   @Published var commands: Command!
 
   private let service: HackerNewsServiceProtocol
-  private let itemStateRelay = CurrentValueSubject<ItemState, Never>(.loading)
+  private let itemStateSubject = CurrentValueSubject<ItemState, Never>(.loading)
 
   private var disposables = Set<AnyCancellable>()
 
   init(service: HackerNewsServiceProtocol) {
     self.service = service
 
-    self.states = State(title: itemStateRelay.value.title, items: itemStateRelay.value.items.map(NewsItem.init))
+    self.states = State(title: itemStateSubject.value.title, items: itemStateSubject.value.items.map(NewsItem.init))
   }
 
   // MARK: - Events / Actions
@@ -28,17 +28,17 @@ class NewsViewModel {
         receiveCompletion: { [weak self] value in
           switch value {
           case .failure:
-            self?.itemStateRelay.send(.error)
+            self?.itemStateSubject.send(.error)
 
           case .finished:
             break
           }
         },
         receiveValue: {[weak self] in
-          self?.itemStateRelay.send(.loaded($0))
+          self?.itemStateSubject.send(.loaded($0))
 
-          guard let title = self?.itemStateRelay.value.title ,
-            let items = self?.itemStateRelay.value.items else {
+          guard let title = self?.itemStateSubject.value.title ,
+            let items = self?.itemStateSubject.value.items else {
               return
           }
 
@@ -48,7 +48,7 @@ class NewsViewModel {
   }
 
   func selectItem(at row: Int) {
-    let item = itemStateRelay.value.items[row]
+    let item = itemStateSubject.value.items[row]
     let viewModel = CommentsViewModel(item: item, service: service)
     self.commands = .showComments(viewModel)
   }
