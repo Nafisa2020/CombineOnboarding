@@ -39,7 +39,7 @@ final class NewsViewController: UITableViewController {
       })
       .store(in: &disposables)
 
-    viewModel.$commands
+    viewModel.commands
       .receive(on: DispatchQueue.main)
       .sink(receiveValue: { [unowned self] value in
         self.execute(value)

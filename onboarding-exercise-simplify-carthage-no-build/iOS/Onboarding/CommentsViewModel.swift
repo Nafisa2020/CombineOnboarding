@@ -8,14 +8,18 @@ class CommentsViewModel {
     let title: String
   }
 
-  @Published var state: State
-
+  var state: AnyPublisher<State, Never>!
+  private let stateSubject: CurrentValueSubject<State, Never>!
   private let item: Item
   private let service: HackerNewsServiceProtocol
 
   init(item: Item, service: HackerNewsServiceProtocol) {
     self.item = item
     self.service = service
-    self.state = (State(title: item.title ?? ""))
+    stateSubject = CurrentValueSubject<State, Never>(State(title: item.title ?? ""))
+
+    self.state = stateSubject
+      .print()
+    .eraseToAnyPublisher()
   }
 }

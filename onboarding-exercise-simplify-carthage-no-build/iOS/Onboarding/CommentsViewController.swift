@@ -24,7 +24,7 @@ class CommentsViewController: UIViewController {
     super.viewDidLoad()
 
     // Bindings
-    viewModel.$state
+    viewModel.state
       .receive(on: DispatchQueue.main)
       .sink(receiveValue: { [unowned self] value in
         self.display(value)

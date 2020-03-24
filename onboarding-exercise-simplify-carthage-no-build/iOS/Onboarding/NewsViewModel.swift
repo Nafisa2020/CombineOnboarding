@@ -4,11 +4,12 @@ import Combine
 import Domain
 
 class NewsViewModel {
-  @Published var commands: Command!
+  var commands: AnyPublisher<Command, Never>!
   var states: AnyPublisher<State, Never>!
 
   private let service: HackerNewsServiceProtocol
   private let itemStateSubject = CurrentValueSubject<ItemState, Never>(.loading)
+  private let commandSubject = PassthroughSubject<Command, Never>()
 
   private var disposables = Set<AnyCancellable>()
 
@@ -20,6 +21,9 @@ class NewsViewModel {
         return State(title: itemState.title, items: itemState.items.map(NewsItem.init))
       }
      .eraseToAnyPublisher()
+
+    self.commands = commandSubject
+      .eraseToAnyPublisher()
   }
 
   // MARK: - Events / Actions
@@ -47,7 +51,7 @@ class NewsViewModel {
   func selectItem(at row: Int) {
     let item = itemStateSubject.value.items[row]
     let viewModel = CommentsViewModel(item: item, service: service)
-    self.commands = .showComments(viewModel)
+    commandSubject.send(.showComments(viewModel))
   }
 
   // MARK: - Nested Types
