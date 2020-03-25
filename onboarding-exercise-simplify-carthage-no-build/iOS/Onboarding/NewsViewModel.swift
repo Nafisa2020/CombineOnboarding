@@ -10,17 +10,26 @@ class NewsViewModel {
   private let service: HackerNewsServiceProtocol
   private let itemStateSubject = CurrentValueSubject<ItemState, Never>(.loading)
   private let commandSubject = PassthroughSubject<Command, Never>()
+  private let toggledSubject = CurrentValueSubject<Bool, Never>(false)
 
   private var disposables = Set<AnyCancellable>()
 
   init(service: HackerNewsServiceProtocol) {
     self.service = service
 
-    self.states = itemStateSubject
-      .map { itemState in
-        return State(title: itemState.title, items: itemState.items.map(NewsItem.init), endRefresh: itemState.endRefresh)
-      }
-     .eraseToAnyPublisher()
+    self.states = itemStateSubject.combineLatest(toggledSubject)
+      .map { itemState, isToggled in
+        let items = isToggled ?
+          itemState.items.filter { item in
+            return item.kids != nil
+          }
+          .map(NewsItem.init)
+          :
+          itemState.items.map(NewsItem.init)
+
+        return State(title: itemState.title, items: items, endRefresh: itemState.endRefresh)
+    }
+    .eraseToAnyPublisher()
 
     self.commands = commandSubject
       .eraseToAnyPublisher()
@@ -44,13 +53,17 @@ class NewsViewModel {
         },
         receiveValue: {[weak self] in
           self?.itemStateSubject.send(.loaded($0))
-        })
+      })
       .store(in: &disposables)
   }
 
   func refreshNews() {
     itemStateSubject.send(.loading)
     loadNews()
+  }
+
+  func showNewsWithComments(isOn: Bool) {
+    toggledSubject.send(isOn)
   }
 
   func selectItem(at row: Int) {

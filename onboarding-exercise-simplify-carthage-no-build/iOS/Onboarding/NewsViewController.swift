@@ -29,6 +29,7 @@ final class NewsViewController: UITableViewController {
     tableView.register(NewsItemCell.self)
 
     configureRefreshControl()
+    configureToggle()
 
     // Load news from the network
     viewModel.loadNews()
@@ -55,6 +56,20 @@ final class NewsViewController: UITableViewController {
     let refreshControl = UIRefreshControl()
     refreshControl.addTarget(self, action: #selector(refreshData(_:)), for: .valueChanged)
     self.refreshControl = refreshControl
+  }
+
+  // MARK: - configure toggle
+  private func configureToggle() {
+    let toggleSwitch = UISwitch()
+    toggleSwitch.isOn = false
+    toggleSwitch.addTarget(self, action: #selector(toggleNews(_:)), for: .valueChanged)
+    let toggleButton = UIBarButtonItem(customView: toggleSwitch)
+    navigationItem.rightBarButtonItem = toggleButton
+  }
+
+  @objc
+  private func toggleNews(_ sender: UISwitch) {
+    viewModel.showNewsWithComments(isOn: sender.isOn)
   }
 
   // MARK: - State
